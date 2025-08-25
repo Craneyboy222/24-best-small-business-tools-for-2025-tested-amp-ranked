@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    image: myapp:latest
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 2
+        delay: 10s
+
+  redis:
+    image: redis:6
+    command: redis-server
+
+  web:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+  cdn:
+    image: mycdn:latest
+    ports:
+      - '443:443'
+
+  load_balancer:
+    image: haproxy:latest
+    ports:
+      - '4000:80'
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg'
+    deploy:
+      mode: global
+
+  monitoring:
+    image: prom/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml'

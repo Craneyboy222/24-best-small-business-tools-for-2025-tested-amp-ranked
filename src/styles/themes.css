@@ -1,0 +1,30 @@
+/* Theme styles */
+.light-theme {
+  --primary-color: #0070f3;
+  --secondary-color: #1c1c1e;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+}
+
+.dark-theme {
+  --primary-color: #1c1c1e;
+  --secondary-color: #0070f3;
+  --background-color: #333;
+  --text-color: #f5f5f5;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background-color: darken(var(--secondary-color), 10%);
+}

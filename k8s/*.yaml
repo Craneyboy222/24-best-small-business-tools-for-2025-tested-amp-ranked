@@ -1,0 +1,83 @@
+/*
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enterprise-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: enterprise-app
+  template:
+    metadata:
+      labels:
+        app: enterprise-app
+    spec:
+      containers:
+      - name: frontend
+        image: myregistry/enterprise-app-frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: 'production'
+      - name: backend
+        image: myregistry/enterprise-app-backend:latest
+        ports:
+        - containerPort: 4000
+        env:
+        - name: NODE_ENV
+          value: 'production'
+      nodeSelector:
+        disktype: ssd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: enterprise-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: enterprise-app
+  ports:
+  - port: 80
+    targetPort: 3000
+    name: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enterprise-app-config
+  namespace: default
+  data:
+    DATABASE_URL: 'postgresql://user:password@postgresql:5432/enterprise_db'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:13
+        env:
+        - name: POSTGRES_USER
+          value: user
+        - name: POSTGRES_PASSWORD
+          value: password
+        - name: POSTGRES_DB
+          value: enterprise_db
+        ports:
+        - containerPort: 5432
+*/

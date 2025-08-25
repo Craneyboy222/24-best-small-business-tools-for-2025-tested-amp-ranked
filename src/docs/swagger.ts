@@ -1,0 +1,158 @@
+import { Swagger } from 'swagger-typescript-api';
+
+const swaggerDocument = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Enterprise Application API',
+    version: '1.0.0',
+    description: 'API documentation for the enterprise application.'
+  },
+  servers: [
+    {
+      url: 'https://api.example.com',
+      description: 'Production server'
+    }
+  ],
+  paths: {
+    '/api/tools': {
+      get: {
+        summary: 'Retrieve a list of tools',
+        parameters: [
+          {
+            name: 'filter',
+            in: 'query',
+            description: 'Filter tools by category',
+            required: false,
+            schema: {
+              type: 'string'
+            }
+          },
+          {
+            name: 'page',
+            in: 'query',
+            description: 'Page number for pagination',
+            required: false,
+            schema: {
+              type: 'integer',
+              default: 1
+            }
+          }
+        ],
+        responses: {
+          '200': {
+            description: 'A list of tools',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/components/schemas/Tool'
+                  }
+                }
+              }
+            }
+          },
+          '500': {
+            description: 'Internal server error'
+          }
+        }
+      }
+    },
+    '/api/tools/{id}': {
+      get: {
+        summary: 'Retrieve detailed information about a tool',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: {
+              type: 'integer'
+            }
+          }
+        ],
+        responses: {
+          '200': {
+            description: 'Tool details',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/ToolDetail'
+                }
+              }
+            }
+          },
+          '404': {
+            description: 'Tool not found'
+          }
+        }
+      }
+    }
+  },
+  components: {
+    schemas: {
+      Tool: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer'
+          },
+          name: {
+            type: 'string'
+          },
+          description: {
+            type: 'string'
+          },
+          category: {
+            type: 'string'
+          },
+          website_url: {
+            type: 'string'
+          }
+        }
+      },
+      ToolDetail: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer'
+          },
+          name: {
+            type: 'string'
+          },
+          description: {
+            type: 'string'
+          },
+          category: {
+            type: 'string'
+          },
+          website_url: {
+            type: 'string'
+          },
+          reviews: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/Review'
+            }
+          }
+        }
+      },
+      Review: {
+        type: 'object',
+        properties: {
+          user_id: {
+            type: 'integer'
+          },
+          rating: {
+            type: 'integer'
+          },
+          comment: {
+            type: 'string'
+          }
+        }
+      }
+    }
+  }
+};
+
+export default swaggerDocument;

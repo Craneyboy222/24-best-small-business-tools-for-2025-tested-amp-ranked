@@ -1,0 +1,15 @@
+{
+  "agent": {
+    "name": "EnterpriseCodeGen",
+    "version": "1.0",
+    "capabilities": [
+      "code_generation",
+      "project_structure_organization",
+      "dependency_management"
+    ],
+    "design_guidelines": {
+      "enableDesignVariants": false,
+      "defaultDesign": "enterprise"
+    }
+  }
+}
