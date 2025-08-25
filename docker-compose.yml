@@ -7,10 +7,14 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgres://user:password@db:5432/mydb
+      NODE_ENV: production
+      API_URL: ${API_URL:-http://localhost:3000}
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      DATABASE_URL: ${DATABASE_URL:-postgres://user:password@db:5432/mydb}
+    depends_on:
+      - db
   db:
-    image: postgres:13
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
